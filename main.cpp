@@ -1,10 +1,11 @@
-//LIBS += -lncurses
+#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
 
-#include <iostream>
 #include "field.h"
 #include "snake.h"
 #include "visual.h"
 #include <glut.h>
+
+bool pause = 0;
 
 field myField;
 
@@ -36,11 +37,14 @@ void processNormalKeys(unsigned char key, int x, int y)
 {
 	if (key == 27)
 		exit(0);
+	if (key == ' ')
+		pause = !pause;
 }
 
 void KeyboardEvent(int caughtKey, int a, int b)
 {
-	mySnake.snakeKeyButtonPushed(caughtKey);
+	if (!pause)
+		mySnake.catchKeyButton(caughtKey);
 }
 
 void Tick()
@@ -64,10 +68,11 @@ void Tick()
 
 void timer(int = 0)
 {
-	Tick();
+	if (!pause)
+		Tick();
 
 	display();
-
+	
 	glutTimerFunc(70, timer, 0);
 }
 
@@ -77,7 +82,7 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(myField.fieldWidth*vis.Scale, myField.fieldLength*vis.Scale);
-	glutCreateWindow("TOP IGRUHA SHEDEVR VASCHE ATVICHAYU");
+	glutCreateWindow("Snake");
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();

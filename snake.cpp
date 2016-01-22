@@ -9,7 +9,7 @@ snake::snake()
     snakeLength = 1;
 }
 
-void snake::snakeMove()
+void snake::movingSnakeNodes()
 {
     if (snakeLength > 1)
         for (int i = snakeLength - 1; i > 0; i--)
@@ -19,7 +19,7 @@ void snake::snakeMove()
         }
 }
 
-void snake::snakeKeyButtonPushed(int key)
+void snake::catchKeyButton(int key)
 {
 	keyButton = key;
 }
@@ -31,21 +31,21 @@ void snake::snakeMoving(field &myField)
     {
         if (_snake[0].iCurrentPosition - 1 < 0)
         {
-            snakeMove();
+			movingSnakeNodes();
 
             _snake[0].iCurrentPosition = myField.fieldLength - 1;
             currentDirection = direction::UP;
         }
         else if (myField._field[_snake[0].iCurrentPosition - 1][_snake[0].jCurrentPosition] == cell::BLANK)
         {
-            snakeMove();
+			movingSnakeNodes();
 
             _snake[0].iCurrentPosition--;
             currentDirection = direction::UP;
         }
         else if (myField._field[_snake[0].iCurrentPosition - 1][_snake[0].jCurrentPosition] == cell::FOOD)
         {
-            snakeMove();
+			movingSnakeNodes();
 
             snakeNode _snakeNode;
             _snakeNode.iCurrentPosition = _snake[snakeLength - 1].iCurrentPosition;
@@ -71,21 +71,21 @@ void snake::snakeMoving(field &myField)
     {
         if (_snake[0].iCurrentPosition + 1 > myField.fieldLength - 1)
         {
-            snakeMove();
+			movingSnakeNodes();
 
             _snake[0].iCurrentPosition = 0;
             currentDirection = direction::DOWN;
         }
         else if (myField._field[_snake[0].iCurrentPosition + 1][_snake[0].jCurrentPosition] == cell::BLANK)
         {
-            snakeMove();
+			movingSnakeNodes();
 
             _snake[0].iCurrentPosition++;
             currentDirection = direction::DOWN;
         }
         else if (myField._field[_snake[0].iCurrentPosition + 1][_snake[0].jCurrentPosition] == cell::FOOD)
         {
-            snakeMove();
+			movingSnakeNodes();
 
             snakeNode _snakeNode;
             _snakeNode.iCurrentPosition = _snake[snakeLength - 1].iCurrentPosition;
@@ -109,21 +109,21 @@ void snake::snakeMoving(field &myField)
     {
         if (_snake[0].jCurrentPosition - 1 < 0)
         {
-            snakeMove();
+			movingSnakeNodes();
 
             _snake[0].jCurrentPosition = myField.fieldWidth - 1;
             currentDirection = direction::LEFT;
         }
         else if (myField._field[_snake[0].iCurrentPosition][_snake[0].jCurrentPosition - 1] == cell::BLANK)
         {
-            snakeMove();
+			movingSnakeNodes();
 
             _snake[0].jCurrentPosition--;
             currentDirection = direction::LEFT;
         }
         else if (myField._field[_snake[0].iCurrentPosition][_snake[0].jCurrentPosition - 1] == cell::FOOD)
         {
-            snakeMove();
+			movingSnakeNodes();
             snakeNode _snakeNode;
             _snakeNode.iCurrentPosition = _snake[snakeLength - 1].iCurrentPosition;
             _snakeNode.jCurrentPosition = _snake[snakeLength - 1].jCurrentPosition;
@@ -146,21 +146,21 @@ void snake::snakeMoving(field &myField)
     {
         if (_snake[0].jCurrentPosition + 1 > myField.fieldWidth - 1)
         {
-            snakeMove();
+			movingSnakeNodes();
 
             _snake[0].jCurrentPosition = 0;
             currentDirection = direction::RIGHT;
         }
         else if (myField._field[_snake[0].iCurrentPosition][_snake[0].jCurrentPosition + 1] == cell::BLANK)
         {
-            snakeMove();
+			movingSnakeNodes();
 
             _snake[0].jCurrentPosition++;
             currentDirection = direction::RIGHT;
         }
         else if (myField._field[_snake[0].iCurrentPosition][_snake[0].jCurrentPosition + 1] == cell::FOOD)
         {
-            snakeMove();
+			movingSnakeNodes();
             snakeNode _snakeNode;
             _snakeNode.iCurrentPosition = _snake[snakeLength - 1].iCurrentPosition;
             _snakeNode.jCurrentPosition = _snake[snakeLength - 1].jCurrentPosition;

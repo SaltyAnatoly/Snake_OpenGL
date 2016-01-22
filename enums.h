@@ -1,7 +1,6 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
-
 enum cell {
     BLANK = 0,
     WALL,

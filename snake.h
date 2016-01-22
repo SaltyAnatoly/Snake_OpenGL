@@ -2,10 +2,7 @@
 #define SNAKE_H
 
 #include "field.h"
-//#include <ncurses.h>
-#include <conio.h>
 #include <vector>
-#include <iostream>
 #include "windows.h"
 
 class snake
@@ -23,27 +20,26 @@ public:
 
     bool isSnakeEatTheFood = 0;
 
-    int waitTime = 100;
-
     int points = 0;
-
-    snake();
 
 	bool dead = 0;
 
-	int keyButton;
+    snake();
 
     void snakeMoving(field &myField);
 
-    ~snake();
+	void catchKeyButton(int key);
 
-    const int moveUp = 101, moveDown = 103, moveRight = 102, moveLeft = 100;
+	~snake();
 
-    int currentDirection = DOWN;
+private:
+	const int moveUp = 101, moveDown = 103, moveRight = 102, moveLeft = 100;
 
-    void snakeMove();
+	int currentDirection = DOWN;
 
-	void snakeKeyButtonPushed(int key);
+	int keyButton;
+
+	void movingSnakeNodes();
 };
 
 #endif // SNAKE_H

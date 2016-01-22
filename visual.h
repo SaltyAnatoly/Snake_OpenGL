@@ -15,13 +15,7 @@ public:
 	int w;
 	int h;
 
-    HANDLE consoleHandle = 0;
-
-    void gameConsoleOut(snake mySnake, field myField);
-
 	void gameOpenGLOut(snake mySnake, field myField);
-
-    void gameOverScreen(snake mySnake);
 
     ~visual();
 };
