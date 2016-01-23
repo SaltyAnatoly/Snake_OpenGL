@@ -30,6 +30,8 @@ public:
 
 	void catchKeyButton(int key);
 
+	void killNode();
+
 	~snake();
 
 private:

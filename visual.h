@@ -19,7 +19,7 @@ public:
 
 	void gameOpenGLOut(snake mySnake, field myField);
 
-	void overlayScreen(snake mySnake, int status);
+	void overlayScreen(snake mySnake, gameCondition status, bool highscore);
 
 	void TextOut(int x, int y, char *string);
 

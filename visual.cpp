@@ -73,12 +73,7 @@ void visual::gameOpenGLOut(snake mySnake, field myField)
 				break;
 			case  cell::SNAKE_TALE:
 				if (mySnake.dead)
-				{
-					if (blinking % 2)
-						glColor3f(0.0, 0.3, 0.0);
-					else
-						glColor3f(0.0, 0.1, 0.0);
-				}
+					glColor3f(1.0, 0.5, 0.0);
 				else
 					glColor3f(0.0, 0.2, 0.0);
 				glRectf((j + 0.1)*Scale, (myField.fieldLength - i - 1 + 0.1)*Scale, (j + 0.9)*Scale, ((myField.fieldLength - i - 1) + 0.9)*Scale);
@@ -113,12 +108,12 @@ void visual::gameOpenGLOut(snake mySnake, field myField)
 	glutSwapBuffers();
 }
 
-void visual::overlayScreen(snake mySnake, int status)
+void visual::overlayScreen(snake mySnake, gameCondition status, bool highscore)
 {
 	char str[10];
 	_itoa_s(mySnake.points, str, 10);
 
-	if (status == 0)
+	if (status == gameCondition::NORMAL)
 	{
 		glColor3f(1.0, 0.0, 0.0);
 		TextOut(w - 164, h - 18, "Your points: ");
@@ -130,7 +125,7 @@ void visual::overlayScreen(snake mySnake, int status)
 		TextOut(w - 165, h - 18, "Your points: ");
 		TextOut(w - 45, h - 18, str);
 	}
-	else if(status == 1)
+	else if(status == gameCondition::PAUSE)
 	{
 		glColor3f(1.0, 0.0, 0.0);
 		TextOut(w / 2 - 11, h / 2 + 20, "PAUSE");
@@ -148,7 +143,7 @@ void visual::overlayScreen(snake mySnake, int status)
 		TextOut(w / 2 - 63, h / 2 - 22, "Press ESC to exit");
 		TextOut(w / 2 + 65, h / 2 - 2, str);
 	}
-	else if (status == 2)
+	else if (status == gameCondition::DEATH)
 	{
 		glColor3f(1.0, 0.0, 0.0);
 		TextOut(w / 2 - 25, h / 2 + 20, "YOU DIED");
@@ -166,7 +161,7 @@ void visual::overlayScreen(snake mySnake, int status)
 		TextOut(w / 2 - 63, h / 2 - 22, "Press ESC to exit");
 		TextOut(w / 2 + 65, h / 2 - 2, str);
 	}
-	else if (status == 3)
+	else if (status == gameCondition::GAMEOVER)
 	{
 		glColor3f(1.0, 0.0, 0.0);
 		TextOut(w / 2 - 31, h / 2 + 20, "GAME OVER");
@@ -183,6 +178,16 @@ void visual::overlayScreen(snake mySnake, int status)
 		TextOut(w / 2 - 60, h / 2 - 2, "Your points: ");
 		TextOut(w / 2 - 93, h / 2 - 22, "Press ESC again to exit");
 		TextOut(w / 2 + 65, h / 2 - 2, str);
+	}
+
+	if (highscore && status != gameCondition::NORMAL)
+	{
+		glColor3f(1.0, 0.0, 0.0);
+		TextOut(w / 2 - 51, h / 2 + 42, "NEW HIGHSCORE!");
+		glColor3f(0.0, 1.0, 0.0);
+		TextOut(w / 2 - 49, h / 2 + 42, "NEW HIGHSCORE!");
+		glColor3f(1.0, 1.0, 1.0);
+		TextOut(w / 2 - 50, h / 2 + 42, "NEW HIGHSCORE!");
 	}
 
 	glFlush();

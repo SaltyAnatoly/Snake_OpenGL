@@ -6,20 +6,43 @@
 #include <windows.h>
 #include "mmsystem.h"
 #include <glut.h>
+#include <fstream>
 
 bool pause = 0;
 
-int status = 0;
+bool isHighscore = 0;
+
+gameCondition status = NORMAL;
 
 int escPressed = 0;
 
-int sound = 3;
+int soundDelay = 3;
 
 field myField;
 
 snake mySnake;
 
 visual vis;
+
+void checkHighscore()
+{
+	std::fstream highscore;
+
+	highscore.open("highscore.hsc", std::ios::in);
+
+	int highscoreValue;
+
+	highscore >> highscoreValue;
+
+	if (highscoreValue < mySnake.points || !highscore)
+	{
+		highscore.close();
+		highscore.open("highscore.hsc", std::ios::out);
+		highscore << mySnake.points;
+		highscore.close();
+		isHighscore = 1;
+	}
+}
 
 void updateField()
 {
@@ -38,9 +61,11 @@ void updateField()
 
 void display()
 {
+	glutReshapeWindow(myField.fieldWidth*vis.Scale, myField.fieldLength*vis.Scale);
+
 	vis.gameOpenGLOut(mySnake, myField);
 
-	vis.overlayScreen(mySnake, status);
+	vis.overlayScreen(mySnake, status, isHighscore);
 }
 
 void processNormalKeys(unsigned char key, int x, int y)
@@ -48,15 +73,19 @@ void processNormalKeys(unsigned char key, int x, int y)
 	if (key == 27)
 	{
 		escPressed++;
-		pause = true;
-		status = 3;
-		if (escPressed == 2 || mySnake.dead)
+		checkHighscore();
+		status = gameCondition::GAMEOVER;
+		if (pause || mySnake.dead)
+		{
 			exit(0);
+		}	
+		pause = true;
 	}
 	if (key == ' ' && !mySnake.dead && escPressed != 1)
 	{
+		checkHighscore();
 		pause = !pause;
-		status = pause;
+		status = (gameCondition)pause;
 	}		
 }
 
@@ -70,12 +99,12 @@ void Tick()
 {
 	mySnake.snakeMoving(myField);
 
-	if (sound == 3)
+	if (soundDelay == 3)
 	{
 		PlaySound(L"sound.wav", NULL, SND_ASYNC | SND_FILENAME);
-		sound = 0;
+		soundDelay = 0;
 	}
-	else sound++;
+	else soundDelay++;
 
 	if (mySnake.isSnakeEatTheFood)
 	{
@@ -86,11 +115,10 @@ void Tick()
 
 	if (mySnake.dead)
 	{
-		status = 2;
+		checkHighscore();
+		status = gameCondition::DEATH;
 		mciSendString(L"play gameover.mp3", NULL, 0, NULL);
 	}
-
-	updateField();
 }
 
 void timer(int = 0)
@@ -98,6 +126,13 @@ void timer(int = 0)
 	if (!pause && !mySnake.dead)
 	{
 		Tick();			
+	}
+
+	updateField();
+	
+	if(mySnake.dead)
+	{
+		mySnake.killNode();
 	}
 
 	display();

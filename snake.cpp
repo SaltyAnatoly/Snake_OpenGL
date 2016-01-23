@@ -9,6 +9,15 @@ snake::snake()
     snakeLength = 1;
 }
 
+void snake::killNode()
+{
+	if (snakeLength > 1)
+	{
+		_snake.pop_back();
+		snakeLength--;
+	}
+}	
+
 void snake::movingSnakeNodes()
 {
     if (snakeLength > 1)

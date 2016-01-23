@@ -1,7 +1,8 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
-enum cell {
+enum cell 
+{
     BLANK = 0,
     WALL,
     SNAKE,
@@ -10,11 +11,20 @@ enum cell {
     FOOD
 };
 
-enum direction {
-    UP = cell::FOOD + 1,
+enum direction 
+{
+    UP = 0,
     DOWN,
     LEFT,
     RIGHT
+};
+
+enum gameCondition
+{
+	NORMAL = 0,
+	PAUSE,
+	DEATH,
+	GAMEOVER
 };
 
 #endif // ENUMS_H
