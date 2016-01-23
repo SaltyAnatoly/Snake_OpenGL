@@ -3,9 +3,17 @@
 #include "field.h"
 #include "snake.h"
 #include "visual.h"
+#include <windows.h>
+#include "mmsystem.h"
 #include <glut.h>
 
 bool pause = 0;
+
+int status = 0;
+
+int escPressed = 0;
+
+int sound = 3;
 
 field myField;
 
@@ -31,14 +39,25 @@ void updateField()
 void display()
 {
 	vis.gameOpenGLOut(mySnake, myField);
+
+	vis.overlayScreen(mySnake, status);
 }
 
 void processNormalKeys(unsigned char key, int x, int y)
 {
 	if (key == 27)
-		exit(0);
-	if (key == ' ')
+	{
+		escPressed++;
+		pause = true;
+		status = 3;
+		if (escPressed == 2 || mySnake.dead)
+			exit(0);
+	}
+	if (key == ' ' && !mySnake.dead && escPressed != 1)
+	{
 		pause = !pause;
+		status = pause;
+	}		
 }
 
 void KeyboardEvent(int caughtKey, int a, int b)
@@ -51,25 +70,35 @@ void Tick()
 {
 	mySnake.snakeMoving(myField);
 
-	if (mySnake.isSnakeEatTheFood)
-		myField.foodCount--;
+	if (sound == 3)
+	{
+		PlaySound(L"sound.wav", NULL, SND_ASYNC | SND_FILENAME);
+		sound = 0;
+	}
+	else sound++;
 
-	if (myField.foodCount == 0)
+	if (mySnake.isSnakeEatTheFood)
 	{
 		myField.spawnFood();
+		PlaySound(L"sound2.wav", NULL, SND_ASYNC | SND_FILENAME);
 		mySnake.isSnakeEatTheFood = 0;
 	}
 
+	if (mySnake.dead)
+	{
+		status = 2;
+		mciSendString(L"play gameover.mp3", NULL, 0, NULL);
+	}
+
 	updateField();
-		
-	if (mySnake.dead == 1)
-		exit(0);
 }
 
 void timer(int = 0)
 {
-	if (!pause)
-		Tick();
+	if (!pause && !mySnake.dead)
+	{
+		Tick();			
+	}
 
 	display();
 	

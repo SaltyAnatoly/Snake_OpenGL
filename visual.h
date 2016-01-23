@@ -10,12 +10,18 @@ class visual
 public:
     visual();
 
-	int Scale;
+	int Scale = 25;
+
+	int blinking = 0;
 
 	int w;
 	int h;
 
 	void gameOpenGLOut(snake mySnake, field myField);
+
+	void overlayScreen(snake mySnake, int status);
+
+	void TextOut(int x, int y, char *string);
 
     ~visual();
 };
